@@ -8,11 +8,14 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-// parse application/x-www-form-urlencoded y parse application/json
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Parse application/json
 app.use(bodyParser.json());
 
-app.use(require('./routes/usuario'));
+// Configuracion global de rutas
+app.use(require('./routes/index'));
 
 // Constante DataBase MongoDB y la Configuracion
 // const db = 'mongodb://localhost:27017/cafe';
