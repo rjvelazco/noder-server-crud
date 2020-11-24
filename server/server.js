@@ -4,6 +4,7 @@ require('./config/config');
 // Paquetes externos.
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -16,6 +17,9 @@ app.use(bodyParser.json());
 
 // Configuracion global de rutas
 app.use(require('./routes/index'));
+
+// Habilitar la carpeta public
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 // Constante DataBase MongoDB y la Configuracion
 // const db = 'mongodb://localhost:27017/cafe';
