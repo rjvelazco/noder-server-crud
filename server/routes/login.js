@@ -60,7 +60,6 @@ async function verify(token) {
     });
     const payload = ticket.getPayload();
 
-    console.log(payload);
     return {
         nombre: payload.name,
         email: payload.email,
