@@ -6,6 +6,7 @@ const { model } = require('../models/producto');
 const app = express();
 
 let Producto = require('../models/producto');
+let Categoria = require('../models/categoria');
 
 // ============================
 // Obtener productos
@@ -123,30 +124,46 @@ app.post('/producto', verificaToken, (req, res) => {
     // grabar el usuario
     // grabar una categoria del listado
     const body = req.body;
+    const categoria = req.body.categoria;
     const usuarioId = req.usuario._id;
 
-    let producto = new Producto({
-        nombre: body.nombre,
-        precioUni: body.precioUni,
-        descripcion: body.descripcion,
-        disponible: body.disponible,
-        categoria: body.categoria,
-        usuario: usuarioId
-    });
-
-    producto.save((err, productoDB) => {
+    Categoria.findById(categoria, (err, categoriaDB) => {
+        if (!categoriaDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'ID de categoria no existe'
+                }
+            });
+        }
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             });
         };
+        let producto = new Producto({
+            nombre: body.nombre,
+            precioUni: body.precioUni,
+            descripcion: body.descripcion,
+            disponible: body.disponible,
+            categoria: categoria,
+            usuario: usuarioId
+        });
+        producto.save((err, productoDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            };
 
-        return res.status(201).json({
-            ok: true,
-            producto: productoDB
-        })
-    });
+            return res.status(201).json({
+                ok: true,
+                producto: productoDB
+            })
+        });
+    })
 
 });
 
